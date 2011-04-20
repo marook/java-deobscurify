@@ -20,9 +20,14 @@
  */
 package com.github.marook.java_deobscurify.matcher;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import com.github.marook.java_deobscurify.compare.ArtifactComparator;
+import com.github.marook.java_deobscurify.matcher.Match.ArtifactDistance;
 import com.github.marook.java_deobscurify.model.Artifact;
 import com.github.marook.java_deobscurify.model.DistanceValidator;
 
@@ -45,8 +50,37 @@ public class ArtifactMatcher {
 
 	public Match findMatchingArtifacts(final Artifact obscurifiedArtifact,
 			final Collection<Artifact> clearTextArtifacts) {
-		// TODO
-		return null;
+		final List<ArtifactDistance> distances = new ArrayList<ArtifactDistance>();
+		
+		for(final Artifact a : clearTextArtifacts){
+			final double distance = comparator.getDistance(a, obscurifiedArtifact);
+			
+			if(distance > maxDistance){
+				continue;
+			}
+			
+			distances.add(new ArtifactDistance(a, distance));
+		}
+		
+		Collections.sort(distances, new Comparator<ArtifactDistance>() {
+			@Override
+			public int compare(final ArtifactDistance o1, final ArtifactDistance o2) {
+				final double d1 = o1.getClearToObscurifiedDistance();
+				final double d2 = o2.getClearToObscurifiedDistance();
+				
+				if(d1 < d2){
+					return -1;
+				}
+				
+				if(d2 < d1){
+					return 1;
+				}
+				
+				return 0;
+			}
+		});
+
+		return new Match(obscurifiedArtifact, distances);
 	}
 
 }
