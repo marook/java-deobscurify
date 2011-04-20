@@ -20,14 +20,18 @@ Build
 
 java-deobscurify is built using apache maven:
 
-$ mvn clean install
+$ mvn clean package
 
 
 ---------------------------------------------------------------------
 Usage
 
-Right now there is no main class to launch java-deobscurify... but comming
-soon.
+$ java -jar target/java-deobscurify-0.0.1-SNAPSHOT.jar [old src] [obscurified src]
+
+old src is the path to directory with the unobscurified source. This should
+be the java source files which you have manually deobscurified.
+
+obscurified src is the path to the directory with the obscurified source.
 
 
 ---------------------------------------------------------------------

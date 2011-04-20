@@ -88,9 +88,15 @@ public class ArtifactFactory {
 			if (f.isDirectory()) {
 				appendArtifactsFromDirectory(artifacts, f, nameGenerator);
 			} else if (javaFileFilter.accept(f)) {
-				final String name = nameGenerator.getArtifactName(f);
+				try{
+					final String name = nameGenerator.getArtifactName(f);
 
-				artifacts.add(createArtifact(name, f));
+					artifacts.add(createArtifact(name, f));
+				}
+				catch(final Exception e){
+					System.err.println("Can't parse " + f);
+					// TODO replace this with a real error handling
+				}
 			}
 		}
 	}
