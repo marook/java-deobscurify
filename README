@@ -1,0 +1,33 @@
+java-deobscurify
+
+1) Current Status
+1) Build
+2) Usage
+3) Contact
+
+
+---------------------------------------------------------------------
+Current Status
+
+Pre alpha, which means java-deobscurify can't be used to deobscurify real world
+projects.
+
+---------------------------------------------------------------------
+Build
+
+java-deobscurify is built using apache maven:
+
+$ mvn clean install
+
+
+---------------------------------------------------------------------
+Usage
+
+Right now there is no main class to launch java-deobscurify... but comming
+soon.
+
+
+---------------------------------------------------------------------
+Contact
+
+* author: Markus Pielmeier <markus.pielmeier@googlemail.com>
