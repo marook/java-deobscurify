@@ -73,4 +73,21 @@ public class ImportsArtifactComparatorTest extends AbstractArtifactTest {
 		Assert.assertTrue(oneNewDistance < twoNewDistance);
 	}
 
+	@Test
+	public void oneDifferentImportIsMoreLikelyThanTwoDifferentImports()
+			throws IOException {
+		final Artifact artifact = testFactory.createTestArtifact("TwoImportsA");
+		final Artifact oneDifferentArtifact = testFactory
+				.createTestArtifact("TwoImportsAOneDifferent.java");
+		final Artifact twoDifferentArtifact = testFactory
+				.createTestArtifact("TwoImportsATwoDifferent.java");
+
+		final double oneDifferentDistance = comparator.getDistance(artifact,
+				oneDifferentArtifact);
+		final double twoDifferentDistance = comparator.getDistance(artifact,
+				twoDifferentArtifact);
+
+		Assert.assertTrue(oneDifferentDistance < twoDifferentDistance);
+	}
+
 }
