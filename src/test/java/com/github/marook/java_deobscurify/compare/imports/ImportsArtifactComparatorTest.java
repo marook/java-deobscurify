@@ -98,9 +98,9 @@ public class ImportsArtifactComparatorTest extends AbstractArtifactTest {
 			throws IOException {
 		final Artifact artifact = testFactory.createTestArtifact("TwoImportsA");
 		final Artifact oneDifferentArtifact = testFactory
-				.createTestArtifact("TwoImportsAOneDifferent.java");
+				.createTestArtifact("TwoImportsAOneDifferent");
 		final Artifact twoDifferentArtifact = testFactory
-				.createTestArtifact("TwoImportsATwoDifferent.java");
+				.createTestArtifact("TwoImportsATwoDifferent");
 
 		final double oneDifferentDistance = comparator.getDistance(artifact,
 				oneDifferentArtifact);

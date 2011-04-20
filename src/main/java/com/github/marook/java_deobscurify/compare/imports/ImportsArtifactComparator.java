@@ -21,15 +21,40 @@
 
 package com.github.marook.java_deobscurify.compare.imports;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.github.marook.java_deobscurify.compare.ArtifactComparator;
 import com.github.marook.java_deobscurify.model.Artifact;
 
 public class ImportsArtifactComparator implements ArtifactComparator {
 
+	private static final double EQUAL_WEIGHT = 1.0;
+
+	private static final double REMOVED_WEIGHT = 1.2;
+
+	private static final double ADDED_WEIGHT = 0.8;
+
 	@Override
 	public double getDistance(final Artifact from, final Artifact to) {
-		// TODO Auto-generated method stub
-		return 0;
+		final Set<String> fromImports = from.getImports();
+		final Set<String> toImports = to.getImports();
+
+		final Set<String> equalImports = new HashSet<String>(fromImports);
+		equalImports.retainAll(toImports);
+
+		final int equal = equalImports.size();
+		final int removed = fromImports.size() - equal;
+		final int added = toImports.size() - equal;
+		
+		if(equal == 0 && removed == 0 && added == 0){
+			return 0;
+		}
+		
+		return (REMOVED_WEIGHT * removed + ADDED_WEIGHT * added - EQUAL_WEIGHT
+				* equal)
+				/ (REMOVED_WEIGHT * removed + ADDED_WEIGHT * added + EQUAL_WEIGHT
+						* equal) / 2.0 + 0.5;
 	}
 
 }
