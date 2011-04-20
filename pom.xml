@@ -5,8 +5,14 @@
 	<artifactId>java-deobscurify</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>java-deobscurify</name>
-	
+
 	<dependencies>
+		<dependency>
+			<groupId>com.google.code.javaparser</groupId>
+			<artifactId>javaparser</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

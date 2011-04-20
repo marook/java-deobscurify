@@ -1,19 +1,29 @@
 package com.github.marook.java_deobscurify.model;
 
+import java.util.Collections;
+import java.util.Set;
+
 public class Artifact {
 	
-	private final Class<?> clazz;
+	private final String name;
 	
-	public Artifact(final Class<?> clazz){
-		if(clazz == null){
+	private final Set<String> imports;
+	
+	public Artifact(final String name, final Set<String> imports){
+		if(name == null){
 			throw new IllegalArgumentException();
 		}
 		
-		this.clazz = clazz;
+		this.name = name;
+		this.imports = Collections.unmodifiableSet(imports);
 	}
 	
-	public Class<?> getClazz() {
-		return clazz;
+	public String getName(){
+		return name;
+	}
+	
+	public Set<String> getImports(){
+		return imports;
 	}
 	
 }
