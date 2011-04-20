@@ -25,40 +25,84 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ArtifactFactory {
-	
-	private Set<String> getImports(final CompilationUnit cu){
+
+	private Set<String> getImports(final CompilationUnit cu) {
 		final List<ImportDeclaration> cuImports = cu.getImports();
 
-		if(cuImports == null){
+		if (cuImports == null) {
 			return Collections.emptySet();
 		}
-		
+
 		final Set<String> imports = new HashSet<String>();
-		
-		for(final ImportDeclaration d : cuImports){
+
+		for (final ImportDeclaration d : cuImports) {
 			imports.add(d.getName().toString());
 		}
-		
+
 		return imports;
 	}
-	
-	public Artifact createArtifact(final String name, final InputStream in) throws IOException {
+
+	public Artifact createArtifact(final String name, final InputStream in)
+			throws IOException {
 		final CompilationUnit cu;
 		try {
 			cu = JavaParser.parse(in);
 		} catch (ParseException e) {
-			throw new IllegalArgumentException("Input stream must contain a valid java file.", e);
+			throw new IllegalArgumentException(
+					"Input stream must contain a valid java file.", e);
 		}
-		
+
 		return new Artifact(name, getImports(cu));
 	}
-	
+
+	private Artifact createArtifact(final String name, final File f)
+			throws IOException {
+		final FileInputStream in = new FileInputStream(f);
+
+		try {
+			return createArtifact(name, in);
+		} finally {
+			in.close();
+		}
+	}
+
+	private void appendArtifactsFromDirectory(
+			final Collection<Artifact> artifacts, final File directory,
+			final ArtifactNameGenerator nameGenerator) throws IOException {
+		final FileFilter javaFileFilter = new JavaSourceFileFilter();
+
+		for (final File f : directory.listFiles()) {
+			if (f.isDirectory()) {
+				appendArtifactsFromDirectory(artifacts, f, nameGenerator);
+			} else if (javaFileFilter.accept(f)) {
+				final String name = nameGenerator.getArtifactName(f);
+
+				artifacts.add(createArtifact(name, f));
+			}
+		}
+	}
+
+	public Collection<Artifact> parseArtifactsFromDirectory(final File directory)
+			throws IOException {
+		final List<Artifact> artifacts = new ArrayList<Artifact>();
+
+		appendArtifactsFromDirectory(artifacts, directory,
+				new ArtifactNameGenerator(directory));
+
+		return artifacts;
+	}
+
 }

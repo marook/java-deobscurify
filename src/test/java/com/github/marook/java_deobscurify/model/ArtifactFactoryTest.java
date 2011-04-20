@@ -20,7 +20,9 @@
  */
 package com.github.marook.java_deobscurify.model;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Set;
 
 import junit.framework.Assert;
@@ -57,6 +59,16 @@ public class ArtifactFactoryTest extends AbstractArtifactTest {
 		Assert.assertEquals(2, imports.size());
 		Assert.assertTrue(imports.contains("java.util.List"));
 		Assert.assertTrue(imports.contains("java.util.Date"));
+	}
+
+	@Test
+	public void parseArtifactsFromDirectoryRecursive() throws IOException {
+		final Collection<Artifact> artifacts = factory
+				.parseArtifactsFromDirectory(new File(
+						"src/test/resources/com/github/marook/java_deobscurify/model/dirParse"));
+
+		Assert.assertEquals(1, artifacts.size());
+		Assert.assertEquals("EmptyClass.java", artifacts.iterator().next().getName());
 	}
 
 }
