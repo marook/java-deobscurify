@@ -31,11 +31,29 @@ public class ImportsArtifactComparatorTest extends AbstractArtifactTest {
 		final Artifact artifactB = testFactory
 				.createTestArtifact("TwoImportsB");
 
+		final double distance = 0.0;
 		final double delta = 0.0001;
-		Assert.assertEquals(0.0, comparator.getDistance(artifactA, artifactB),
-				delta);
-		Assert.assertEquals(0.0, comparator.getDistance(artifactB, artifactA),
-				delta);
+		Assert.assertEquals(distance,
+				comparator.getDistance(artifactA, artifactB), delta);
+		Assert.assertEquals(distance,
+				comparator.getDistance(artifactB, artifactA), delta);
+	}
+
+	@Test
+	public void oneNewImportIsMoreLikelyThanOneLess() throws IOException {
+		final Artifact oneImportArtifact = testFactory
+				.createTestArtifact("OneImport");
+		final Artifact twoImportsArtifact = testFactory
+				.createTestArtifact("TwoImportsA");
+		final Artifact threeImportsArtifact = testFactory
+				.createTestArtifact("ThreeImports");
+
+		final double twoToOneDistance = comparator.getDistance(
+				twoImportsArtifact, oneImportArtifact);
+		final double twoToThreeDistance = comparator.getDistance(
+				twoImportsArtifact, threeImportsArtifact);
+
+		Assert.assertTrue(twoToOneDistance > twoToThreeDistance);
 	}
 
 }
