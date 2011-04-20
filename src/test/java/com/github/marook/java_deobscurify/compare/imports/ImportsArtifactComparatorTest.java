@@ -32,9 +32,9 @@ public class ImportsArtifactComparatorTest extends AbstractArtifactTest {
 				.createTestArtifact("TwoImportsB");
 
 		final double delta = 0.0001;
-		Assert.assertEquals(1.0, comparator.getDistance(artifactA, artifactB),
+		Assert.assertEquals(0.0, comparator.getDistance(artifactA, artifactB),
 				delta);
-		Assert.assertEquals(1.0, comparator.getDistance(artifactB, artifactA),
+		Assert.assertEquals(0.0, comparator.getDistance(artifactB, artifactA),
 				delta);
 	}
 
