@@ -31,7 +31,6 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import com.github.marook.java_deobscurify.compare.ArtifactComparator;
 import com.github.marook.java_deobscurify.compare.mock.GenericMockArtifactComparator;
@@ -39,25 +38,34 @@ import com.github.marook.java_deobscurify.compare.mock.GenericMockArtifactCompar
 import com.github.marook.java_deobscurify.compare.mock.StaticMockArtifactComparator;
 import com.github.marook.java_deobscurify.model.Artifact;
 import com.github.marook.java_deobscurify.model.DistanceValidator;
+import com.github.marook.java_deobscurify.model.MockArtifactFactory;
 
 public class ArtifactMatcherTest {
 
 	private Artifact obscurifiedArtifact;
-
-	private Artifact createMockArtifact() {
-		return Mockito.mock(Artifact.class);
+	
+	private MockArtifactFactory mockArtifactFactory;
+	
+	@Before 
+	public void setUp(){
+		setUpMockArtifactFactory();
+		
+		setUpObscurifiedArtifact();
 	}
 
-	@Before
-	public void setUpObscurifiedArtifact() {
-		obscurifiedArtifact = createMockArtifact();
+	private void setUpObscurifiedArtifact() {
+		obscurifiedArtifact = mockArtifactFactory.createMockArtifact();
+	}
+	
+	private void setUpMockArtifactFactory(){
+		mockArtifactFactory = new MockArtifactFactory();
 	}
 
 	@Test
 	public void noDistancesBiggerThanMaxDistanceAreFound() {
 		final ArtifactComparator comparator = new StaticMockArtifactComparator(
 				0.5);
-		final Artifact clearTextArtifact = createMockArtifact();
+		final Artifact clearTextArtifact = mockArtifactFactory.createMockArtifact();
 		final Collection<Artifact> clearTextArtifacts = Collections
 				.singletonList(clearTextArtifact);
 
@@ -72,8 +80,8 @@ public class ArtifactMatcherTest {
 
 	@Test
 	public void clearTextArtifactsAreSortedByDistance() {
-		final Artifact clearText1Artifact = createMockArtifact();
-		final Artifact clearText2Artifact = createMockArtifact();
+		final Artifact clearText1Artifact = mockArtifactFactory.createMockArtifact();
+		final Artifact clearText2Artifact = mockArtifactFactory.createMockArtifact();
 
 		final List<Artifact> createTextArtifacts = Arrays
 				.asList(new Artifact[] { clearText2Artifact, clearText1Artifact });
