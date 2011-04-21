@@ -24,6 +24,7 @@ package com.github.marook.java_deobscurify;
 import java.io.File;
 import java.util.Collection;
 
+import com.github.marook.java_deobscurify.compare.ArtifactComparator;
 import com.github.marook.java_deobscurify.compare.imports.ImportsArtifactComparator;
 import com.github.marook.java_deobscurify.matcher.ArtifactMatcher;
 import com.github.marook.java_deobscurify.matcher.Match;
@@ -32,6 +33,10 @@ import com.github.marook.java_deobscurify.model.Artifact;
 import com.github.marook.java_deobscurify.model.ArtifactFactory;
 
 public class FindMatches {
+
+	private static ArtifactComparator createArtifactComparator() {
+		return new ImportsArtifactComparator();
+	}
 
 	public static void main(final String[] args) {
 		try {
@@ -43,16 +48,16 @@ public class FindMatches {
 					.parseArtifactsFromDirectory(clearTextDir);
 			final Collection<Artifact> obscurifiedArtifacts = artifactFactory
 					.parseArtifactsFromDirectory(obscurifiedDir);
-			
+
 			final ArtifactMatcher artifactMatcher = new ArtifactMatcher(
-					new ImportsArtifactComparator(), 0.2);
-			
+					createArtifactComparator(), 0.2);
+
 			final MatchPrinter matchPrinter = new MatchPrinter();
-			
-			for(final Artifact obscurifiedArtifact : obscurifiedArtifacts){
+
+			for (final Artifact obscurifiedArtifact : obscurifiedArtifacts) {
 				final Match m = artifactMatcher.findMatchingArtifacts(
 						obscurifiedArtifact, clearTextArtifacts);
-				
+
 				matchPrinter.printMatch(System.out, m);
 			}
 
