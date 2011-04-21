@@ -21,30 +21,30 @@
 
 package com.github.marook.java_deobscurify.model;
 
-import java.util.Collections;
-import java.util.List;
-
-public class TypeDeclaration {
+public class MethodDeclaration {
+	
+	private final Visibility visibility;
 	
 	private final String name;
 	
-	private final List<MethodDeclaration> methods;
-	
-	public TypeDeclaration(final String name, final List<MethodDeclaration> methods){
-		if(name == null){
+	public MethodDeclaration(final Visibility visibility, final String name){
+		if(visibility == null){
+			throw new IllegalArgumentException();
+		}
+		if(name.trim().isEmpty()){
 			throw new IllegalArgumentException();
 		}
 		
+		this.visibility = visibility;
 		this.name = name;
-		this.methods = Collections.unmodifiableList(methods);
+	}
+	
+	public Visibility getVisibility() {
+		return visibility;
 	}
 	
 	public String getName() {
 		return name;
-	}
-	
-	public List<MethodDeclaration> getMethods() {
-		return methods;
 	}
 
 }

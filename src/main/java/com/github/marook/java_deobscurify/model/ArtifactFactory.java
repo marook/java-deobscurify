@@ -24,6 +24,8 @@ import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
+import japa.parser.ast.body.BodyDeclaration;
+import japa.parser.ast.body.ModifierSet;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -55,23 +57,60 @@ public class ArtifactFactory {
 		return imports;
 	}
 	
-	private TypeDeclaration getTypeDeclaration(final japa.parser.ast.body.TypeDeclaration type){
-		return new TypeDeclaration(type.getName());
-	}
-	
-	private List<TypeDeclaration> getTypeDeclarations(final CompilationUnit cu){
-		final List<japa.parser.ast.body.TypeDeclaration> types = cu.getTypes();
+	private Visibility getVisibility(final int modifiers){
+		if((modifiers & ModifierSet.PRIVATE) > 0){
+			return Visibility.PRIVATE;
+		}
+		if((modifiers & ModifierSet.PROTECTED) > 0){
+			return Visibility.PROTECTED;
+		}
+		if((modifiers & ModifierSet.PUBLIC) > 0){
+			return Visibility.PUBLIC;
+		}
 		
-		if(types == null){
+		return Visibility.PACKAGE;
+	}
+
+	private MethodDeclaration getMethod(
+			final japa.parser.ast.body.MethodDeclaration md) {
+		return new MethodDeclaration(getVisibility(md.getModifiers()), md.getName());
+	}
+
+	private List<MethodDeclaration> getMethods(
+			final japa.parser.ast.body.TypeDeclaration type) {
+		final List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
+
+		for (final BodyDeclaration bd : type.getMembers()) {
+			if (!(bd instanceof japa.parser.ast.body.MethodDeclaration)) {
+				continue;
+			}
+
+			final japa.parser.ast.body.MethodDeclaration md = (japa.parser.ast.body.MethodDeclaration) bd;
+			methods.add(getMethod(md));
+		}
+
+		return methods;
+	}
+
+	private TypeDeclaration getTypeDeclaration(
+			final japa.parser.ast.body.TypeDeclaration type) {
+		return new TypeDeclaration(type.getName(), getMethods(type));
+	}
+
+	private List<TypeDeclaration> getTypeDeclarations(final CompilationUnit cu) {
+		final List<japa.parser.ast.body.TypeDeclaration> types = cu.getTypes();
+
+		if (types == null) {
 			return Collections.emptyList();
 		}
-		
-		final List<TypeDeclaration> decs = new ArrayList<TypeDeclaration>(types.size());
-		
-		for(final japa.parser.ast.body.TypeDeclaration type : types){
+
+		final List<TypeDeclaration> decs = new ArrayList<TypeDeclaration>(
+				types.size());
+
+		for (final japa.parser.ast.body.TypeDeclaration type : types) {
 			decs.add(getTypeDeclaration(type));
 		}
-		
+
 		return decs;
 	}
 
@@ -108,12 +147,11 @@ public class ArtifactFactory {
 			if (f.isDirectory()) {
 				appendArtifactsFromDirectory(artifacts, f, nameGenerator);
 			} else if (javaFileFilter.accept(f)) {
-				try{
+				try {
 					final String name = nameGenerator.getArtifactName(f);
 
 					artifacts.add(createArtifact(name, f));
-				}
-				catch(final Exception e){
+				} catch (final Exception e) {
 					System.err.println("Can't parse " + f);
 					// TODO replace this with a real error handling
 				}

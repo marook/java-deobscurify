@@ -54,5 +54,17 @@ public class Artifact {
 	public List<TypeDeclaration> getTypeDeclarations() {
 		return typeDeclarations;
 	}
+	
+	public TypeDeclaration getTypeDeclaration(final String name){
+		for(final TypeDeclaration td : getTypeDeclarations()){
+			if(!name.equals(td.getName())){
+				continue;
+			}
+			
+			return td;
+		}
+		
+		return null;
+	}
 
 }
