@@ -18,41 +18,23 @@
  * along with java-deobscurify.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 package com.github.marook.java_deobscurify.model;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-public class Artifact {
-
+public class TypeDeclaration {
+	
 	private final String name;
-
-	private final Set<String> imports;
-
-	private final List<TypeDeclaration> typeDeclarations;
-
-	public Artifact(final String name, final Set<String> imports,
-			final List<TypeDeclaration> typeDeclarations) {
-		if (name == null) {
+	
+	public TypeDeclaration(final String name){
+		if(name == null){
 			throw new IllegalArgumentException();
 		}
-
+		
 		this.name = name;
-		this.imports = Collections.unmodifiableSet(imports);
-		this.typeDeclarations = Collections.unmodifiableList(typeDeclarations);
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public Set<String> getImports() {
-		return imports;
 	}
 	
-	public List<TypeDeclaration> getTypeDeclarations() {
-		return typeDeclarations;
+	public String getName() {
+		return name;
 	}
 
 }

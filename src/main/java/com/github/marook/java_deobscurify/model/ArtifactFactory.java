@@ -54,6 +54,26 @@ public class ArtifactFactory {
 
 		return imports;
 	}
+	
+	private TypeDeclaration getTypeDeclaration(final japa.parser.ast.body.TypeDeclaration type){
+		return new TypeDeclaration(type.getName());
+	}
+	
+	private List<TypeDeclaration> getTypeDeclarations(final CompilationUnit cu){
+		final List<japa.parser.ast.body.TypeDeclaration> types = cu.getTypes();
+		
+		if(types == null){
+			return Collections.emptyList();
+		}
+		
+		final List<TypeDeclaration> decs = new ArrayList<TypeDeclaration>(types.size());
+		
+		for(final japa.parser.ast.body.TypeDeclaration type : types){
+			decs.add(getTypeDeclaration(type));
+		}
+		
+		return decs;
+	}
 
 	public Artifact createArtifact(final String name, final InputStream in)
 			throws IOException {
@@ -65,7 +85,7 @@ public class ArtifactFactory {
 					"Input stream must contain a valid java file.", e);
 		}
 
-		return new Artifact(name, getImports(cu));
+		return new Artifact(name, getImports(cu), getTypeDeclarations(cu));
 	}
 
 	private Artifact createArtifact(final String name, final File f)
