@@ -21,15 +21,47 @@
 
 package com.github.marook.java_deobscurify.compare.methods_equal;
 
-import com.github.marook.java_deobscurify.compare.ArtifactComparator;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import com.github.marook.java_deobscurify.compare.count.AbstractCountArtifactComparator;
 import com.github.marook.java_deobscurify.model.Artifact;
+import com.github.marook.java_deobscurify.model.MethodDeclaration;
+import com.github.marook.java_deobscurify.model.TypeDeclaration;
+import com.github.marook.java_deobscurify.util.XCollections;
 
-public class MethodsEqualArtifactComparator implements ArtifactComparator {
-
+public class MethodsEqualArtifactComparator extends
+		AbstractCountArtifactComparator {
+	
 	@Override
-	public double getDistance(final Artifact from, final Artifact to) {
-		// TODO Auto-generated method stub
-		return 0;
+	protected int getNumberOfElements(final Artifact a) {
+		int methods = 0;
+		
+		for(final TypeDeclaration td : a.getTypeDeclarations()){
+			methods += td.getMethods().size();
+		}
+		
+		return methods;
+	}
+	
+	private Collection<MethodDeclaration> getMethods(final Artifact a){
+		final Collection<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
+		
+		for(final TypeDeclaration td : a.getTypeDeclarations()){
+			methods.addAll(td.getMethods());
+		}
+		
+		return methods;
+	}
+	
+	@Override
+	protected int getNumberOfEqualElements(final Artifact a1, final Artifact a2) {
+		final Collection<MethodDeclaration> a1Methods = getMethods(a1); 
+		final Collection<MethodDeclaration> a2Methods = getMethods(a2);
+		
+		XCollections.retainAll(a1Methods, a2Methods, new MethodSignatureEqualator());
+		
+		return a1Methods.size();
 	}
 
 }

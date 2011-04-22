@@ -22,10 +22,14 @@
 package com.github.marook.java_deobscurify;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 
 import com.github.marook.java_deobscurify.compare.ArtifactComparator;
 import com.github.marook.java_deobscurify.compare.imports.ImportsArtifactComparator;
+import com.github.marook.java_deobscurify.compare.merge.ChildComparator;
+import com.github.marook.java_deobscurify.compare.merge.MergeArtifactComparator;
+import com.github.marook.java_deobscurify.compare.methods_equal.MethodsEqualArtifactComparator;
 import com.github.marook.java_deobscurify.matcher.ArtifactMatcher;
 import com.github.marook.java_deobscurify.matcher.Match;
 import com.github.marook.java_deobscurify.matcher.MatchPrinter;
@@ -35,7 +39,13 @@ import com.github.marook.java_deobscurify.model.ArtifactFactory;
 public class FindMatches {
 
 	private static ArtifactComparator createArtifactComparator() {
-		return new ImportsArtifactComparator();
+		final ChildComparator importsComparator = new ChildComparator(
+				new ImportsArtifactComparator(), 0.6);
+		final ChildComparator methodsComparator = new ChildComparator(
+				new MethodsEqualArtifactComparator(), 1.2);
+
+		return new MergeArtifactComparator(Arrays.asList(new ChildComparator[] {
+				importsComparator, methodsComparator }));
 	}
 
 	public static void main(final String[] args) {

@@ -24,10 +24,10 @@ package com.github.marook.java_deobscurify.compare.imports;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.github.marook.java_deobscurify.compare.ArtifactComparator;
+import com.github.marook.java_deobscurify.compare.count.AbstractCountArtifactComparator;
 import com.github.marook.java_deobscurify.model.Artifact;
 
-public class ImportsArtifactComparator implements ArtifactComparator {
+public class ImportsArtifactComparator extends AbstractCountArtifactComparator {
 
 	private static final double EQUAL_WEIGHT = 1.0;
 
@@ -35,26 +35,21 @@ public class ImportsArtifactComparator implements ArtifactComparator {
 
 	private static final double ADDED_WEIGHT = 0.8;
 
+	public ImportsArtifactComparator() {
+		super(EQUAL_WEIGHT, REMOVED_WEIGHT, ADDED_WEIGHT);
+	}
+
 	@Override
-	public double getDistance(final Artifact from, final Artifact to) {
-		final Set<String> fromImports = from.getImports();
-		final Set<String> toImports = to.getImports();
+	protected int getNumberOfElements(final Artifact a) {
+		return a.getImports().size();
+	}
 
-		final Set<String> equalImports = new HashSet<String>(fromImports);
-		equalImports.retainAll(toImports);
-
-		final int equal = equalImports.size();
-		final int removed = fromImports.size() - equal;
-		final int added = toImports.size() - equal;
+	@Override
+	protected int getNumberOfEqualElements(final Artifact a1, final Artifact a2) {
+		final Set<String> equalImports = new HashSet<String>(a1.getImports());
+		equalImports.retainAll(a2.getImports());
 		
-		if(equal == 0 && removed == 0 && added == 0){
-			return 0;
-		}
-		
-		return (REMOVED_WEIGHT * removed + ADDED_WEIGHT * added - EQUAL_WEIGHT
-				* equal)
-				/ (REMOVED_WEIGHT * removed + ADDED_WEIGHT * added + EQUAL_WEIGHT
-						* equal) / 2.0 + 0.5;
+		return equalImports.size();
 	}
 
 }
