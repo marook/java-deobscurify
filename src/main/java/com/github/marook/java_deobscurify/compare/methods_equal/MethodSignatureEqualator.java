@@ -21,15 +21,19 @@
 
 package com.github.marook.java_deobscurify.compare.methods_equal;
 
-import com.github.marook.java_deobscurify.compare.ArtifactComparator;
-import com.github.marook.java_deobscurify.model.Artifact;
+import com.github.marook.java_deobscurify.model.MethodDeclaration;
+import com.github.marook.java_deobscurify.util.Equalator;
 
-public class MethodsEqualArtifactComparator implements ArtifactComparator {
+public class MethodSignatureEqualator implements Equalator<MethodDeclaration> {
 
 	@Override
-	public double getDistance(final Artifact from, final Artifact to) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean equalTo(final MethodDeclaration o1,
+			final MethodDeclaration o2) {
+		if(!o1.getReturnType().equals(o2.getReturnType())){
+			return false;
+		}
+		
+		return o1.getParameters().equals(o2.getParameters()); 
 	}
 
 }

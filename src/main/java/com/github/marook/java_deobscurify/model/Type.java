@@ -36,5 +36,25 @@ public class Type {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public boolean equals(final Object obj) {
+		if(this == obj){
+			return true;
+		}
+		
+		if(!(obj instanceof Type)){
+			return false;
+		}
+		
+		final Type other = (Type) obj;
+		
+		return this.name.equals(other.name);
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
 
 }
