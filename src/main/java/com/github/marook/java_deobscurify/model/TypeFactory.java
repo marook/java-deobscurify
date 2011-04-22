@@ -65,9 +65,13 @@ public class TypeFactory {
 		this.imports = Collections.unmodifiableSet(imports);
 	}
 	
+	private String toRegEx(final String s){
+		return "\\Q" + s + "\\E";
+	}
+	
 	private String getImport(final String typeName){
 		// TODO escape typeName
-		final Pattern p = Pattern.compile("(^|(.+[.]))" + typeName + "$");
+		final Pattern p = Pattern.compile("(^|(.+[.]))" + toRegEx(typeName) + "$");
 		
 		for(final String i : imports){
 			if(!p.matcher(i).matches()){
@@ -83,13 +87,25 @@ public class TypeFactory {
 	private boolean isFullyQualifiedName(final String typeName){
 		return typeName.contains(".");
 	}
+	
+	private boolean isBuiltInType(final String typeName){
+		final String rawType;
+		if(typeName.endsWith("[]")){
+			rawType = typeName.substring(0, typeName.length() - "[]".length());
+		}
+		else{
+			rawType = typeName;
+		}
+		
+		return BUILT_IN_TYPES.contains(rawType);
+	}
 
 	public Type getType(final String typeName) {
 		if(isFullyQualifiedName(typeName)){
 			return new Type(typeName);
 		}
 		
-		if(BUILT_IN_TYPES.contains(typeName)){
+		if(isBuiltInType(typeName)){
 			// TODO store built in types and do not regenerate them
 			return new Type(typeName);
 		}

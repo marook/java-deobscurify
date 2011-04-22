@@ -68,7 +68,16 @@ public class TypeFactoryTest {
 	public void resolveAtomicBuiltInTypes() {
 		final String myType = "int";
 
-		final TypeFactory factory = createTypeFactory(new String[] { myType });
+		final TypeFactory factory = createTypeFactory(new String[] { });
+
+		Assert.assertEquals(myType, factory.getType(myType).getName());
+	}
+
+	@Test
+	public void resolveArrays() {
+		final String myType = "int[]";
+
+		final TypeFactory factory = createTypeFactory(new String[] { });
 
 		Assert.assertEquals(myType, factory.getType(myType).getName());
 	}
