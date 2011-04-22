@@ -42,11 +42,4 @@ public class ArtifactFactoryGeneralTest extends AbstractArtifactFactoryTest {
 		testFactory.createTestArtifact("BrokenClass");
 	}
 	
-	@Test
-	public void instantiateEnumArtifact() throws IOException {
-		final Artifact a = testFactory.createTestArtifact("EnumType");
-		
-		Assert.assertNotNull(a);
-	}
-
 }
