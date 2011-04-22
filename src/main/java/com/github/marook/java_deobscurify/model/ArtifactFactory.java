@@ -24,6 +24,7 @@ import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
+import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ModifierSet;
 
@@ -47,7 +48,7 @@ public class ArtifactFactory {
 		if (cuImports == null) {
 			return Collections.emptySet();
 		}
-
+		
 		final Set<String> imports = new HashSet<String>();
 
 		for (final ImportDeclaration d : cuImports) {
@@ -56,28 +57,56 @@ public class ArtifactFactory {
 
 		return imports;
 	}
-	
-	private Visibility getVisibility(final int modifiers){
-		if((modifiers & ModifierSet.PRIVATE) > 0){
+
+	private Visibility getVisibility(final int modifiers) {
+		if ((modifiers & ModifierSet.PRIVATE) > 0) {
 			return Visibility.PRIVATE;
 		}
-		if((modifiers & ModifierSet.PROTECTED) > 0){
+		if ((modifiers & ModifierSet.PROTECTED) > 0) {
 			return Visibility.PROTECTED;
 		}
-		if((modifiers & ModifierSet.PUBLIC) > 0){
+		if ((modifiers & ModifierSet.PUBLIC) > 0) {
 			return Visibility.PUBLIC;
 		}
-		
+
 		return Visibility.PACKAGE;
 	}
 
+	private Parameter getParameter(final japa.parser.ast.body.Parameter p,
+			final TypeFactory typeFactory) {
+		return new Parameter(typeFactory.getType(p.getType()));
+	}
+
+	private List<Parameter> getMethodParameters(
+			final japa.parser.ast.body.MethodDeclaration md,
+			final TypeFactory typeFactory) {
+		final List<japa.parser.ast.body.Parameter> mdps = md.getParameters();
+
+		if (mdps == null) {
+			return Collections.emptyList();
+		}
+
+		final List<Parameter> parameters = new ArrayList<Parameter>(mdps.size());
+
+		for (final japa.parser.ast.body.Parameter p : mdps) {
+			parameters.add(getParameter(p, typeFactory));
+		}
+
+		return parameters;
+	}
+
 	private MethodDeclaration getMethod(
-			final japa.parser.ast.body.MethodDeclaration md) {
-		return new MethodDeclaration(getVisibility(md.getModifiers()), md.getName());
+			final japa.parser.ast.body.MethodDeclaration md,
+			final TypeFactory typeFactory) {
+		final Type returnType = typeFactory.getType(md.getType());
+
+		return new MethodDeclaration(getVisibility(md.getModifiers()),
+				md.getName(), returnType, getMethodParameters(md, typeFactory));
 	}
 
 	private List<MethodDeclaration> getMethods(
-			final japa.parser.ast.body.TypeDeclaration type) {
+			final japa.parser.ast.body.TypeDeclaration type,
+			final TypeFactory typeFactory) {
 		final List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
 
 		for (final BodyDeclaration bd : type.getMembers()) {
@@ -86,18 +115,21 @@ public class ArtifactFactory {
 			}
 
 			final japa.parser.ast.body.MethodDeclaration md = (japa.parser.ast.body.MethodDeclaration) bd;
-			methods.add(getMethod(md));
+			methods.add(getMethod(md, typeFactory));
 		}
 
 		return methods;
 	}
 
 	private TypeDeclaration getTypeDeclaration(
-			final japa.parser.ast.body.TypeDeclaration type) {
-		return new TypeDeclaration(type.getName(), getMethods(type));
+			final japa.parser.ast.body.TypeDeclaration type,
+			final TypeFactory typeFactory) {
+		return new TypeDeclaration(type.getName(),
+				getMethods(type, typeFactory));
 	}
 
-	private List<TypeDeclaration> getTypeDeclarations(final CompilationUnit cu) {
+	private List<TypeDeclaration> getTypeDeclarations(final CompilationUnit cu,
+			final TypeFactory typeFactory) {
 		final List<japa.parser.ast.body.TypeDeclaration> types = cu.getTypes();
 
 		if (types == null) {
@@ -108,7 +140,7 @@ public class ArtifactFactory {
 				types.size());
 
 		for (final japa.parser.ast.body.TypeDeclaration type : types) {
-			decs.add(getTypeDeclaration(type));
+			decs.add(getTypeDeclaration(type, typeFactory));
 		}
 
 		return decs;
@@ -124,7 +156,13 @@ public class ArtifactFactory {
 					"Input stream must contain a valid java file.", e);
 		}
 
-		return new Artifact(name, getImports(cu), getTypeDeclarations(cu));
+		final Set<String> imports = getImports(cu);
+
+		final PackageDeclaration pakage = cu.getPakage();
+		final TypeFactory typeFactory = new TypeFactory((pakage == null) ? ""
+				: pakage.getName().toString(), imports);
+
+		return new Artifact(name, imports, getTypeDeclarations(cu, typeFactory));
 	}
 
 	private Artifact createArtifact(final String name, final File f)

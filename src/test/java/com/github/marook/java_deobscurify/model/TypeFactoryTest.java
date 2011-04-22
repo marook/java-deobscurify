@@ -22,6 +22,7 @@
 package com.github.marook.java_deobscurify.model;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import junit.framework.Assert;
 
@@ -32,7 +33,7 @@ public class TypeFactoryTest {
 	private static final String THIS_PACKAGE = "this.is.my.package";
 
 	private static TypeFactory createTypeFactory(final String[] imports) {
-		return new TypeFactory(THIS_PACKAGE, Arrays.asList(imports));
+		return new TypeFactory(THIS_PACKAGE, new HashSet<String>(Arrays.asList(imports)));
 	}
 
 	@Test

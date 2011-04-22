@@ -32,20 +32,33 @@ public class ArtifactFactoryMethodsTest extends AbstractArtifactFactoryTest {
 	private void assertMethod(final TypeDeclaration td, final int methodIndex,
 			final Visibility methodVisibility, final String methodName) {
 		final MethodDeclaration md = td.getMethods().get(methodIndex);
-		
+
 		Assert.assertEquals(methodName, md.getName());
 		Assert.assertEquals(methodVisibility, md.getVisibility());
 	}
 
-	@Test
-	public void testMethodVisibility() throws IOException {
+	private TypeDeclaration getClassWithMethods() throws IOException {
 		final Artifact a = testFactory.createTestArtifact("ClassWithMethods");
 
-		final TypeDeclaration td = a.getTypeDeclaration("ClassWithMethods");
+		return a.getTypeDeclaration("ClassWithMethods");
+	}
+
+	@Test
+	public void testMethodVisibility() throws IOException {
+		final TypeDeclaration td = getClassWithMethods();
+
 		assertMethod(td, 0, Visibility.PACKAGE, "packageVisible");
 		assertMethod(td, 1, Visibility.PRIVATE, "privateVisible");
 		assertMethod(td, 2, Visibility.PROTECTED, "protectedVisible");
 		assertMethod(td, 3, Visibility.PUBLIC, "publicVisible");
+	}
+
+	@Test
+	public void testMethodReturnType() throws IOException {
+		final TypeDeclaration td = getClassWithMethods();
+
+		Assert.assertEquals("my.test.PackageVisibleClass",
+				td.getMethods().get(0).getReturnType().getName());
 	}
 
 }

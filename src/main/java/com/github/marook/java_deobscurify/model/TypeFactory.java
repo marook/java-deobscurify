@@ -21,9 +21,9 @@
 
 package com.github.marook.java_deobscurify.model;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -44,9 +44,9 @@ public class TypeFactory {
 
 	private final String currentPackage;
 	
-	private final List<String> imports;
+	private final Set<String> imports;
 
-	private static void validateImports(final List<String> imports) {
+	private static void validateImports(final Collection<String> imports) {
 		for (final String i : imports) {
 			if (i.trim().endsWith("*")) {
 				throw new IllegalArgumentException(
@@ -55,14 +55,14 @@ public class TypeFactory {
 		}
 	}
 
-	public TypeFactory(final String currentPackage, final List<String> imports) {
+	public TypeFactory(final String currentPackage, final Set<String> imports) {
 		if(currentPackage == null){
 			throw new IllegalArgumentException();
 		}
 		validateImports(imports);
 
 		this.currentPackage = currentPackage;
-		this.imports = Collections.unmodifiableList(imports);
+		this.imports = Collections.unmodifiableSet(imports);
 	}
 	
 	private String getImport(final String typeName){
@@ -104,6 +104,10 @@ public class TypeFactory {
 		}
 		
 		return new Type(currentPackage + "." + typeName);
+	}
+	
+	public Type getType(final japa.parser.ast.type.Type type){
+		return getType(type.toString());
 	}
 
 }

@@ -1,15 +1,18 @@
+package my.test;
+
+import java.util.Date;
 
 public class ClassWithMethods {
 	
-	void packageVisible(){
+	PackageVisibleClass packageVisible(){
 		
 	}
 
-	private void privateVisible(){
+	private void privateVisible(int i){
 		
 	}
 	
-	protected void protectedVisible(){
+	protected void protectedVisible(Date d){
 		
 	}
 	
