@@ -41,5 +41,12 @@ public class ArtifactFactoryGeneralTest extends AbstractArtifactFactoryTest {
 	public void exceptionOnParsingBrokenClass() throws IOException {
 		testFactory.createTestArtifact("BrokenClass");
 	}
+	
+	@Test
+	public void instantiateEnumArtifact() throws IOException {
+		final Artifact a = testFactory.createTestArtifact("EnumType");
+		
+		Assert.assertNotNull(a);
+	}
 
 }

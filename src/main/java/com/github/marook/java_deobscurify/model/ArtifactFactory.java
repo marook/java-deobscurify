@@ -48,7 +48,7 @@ public class ArtifactFactory {
 		if (cuImports == null) {
 			return Collections.emptySet();
 		}
-		
+
 		final Set<String> imports = new HashSet<String>();
 
 		for (final ImportDeclaration d : cuImports) {
@@ -109,13 +109,15 @@ public class ArtifactFactory {
 			final TypeFactory typeFactory) {
 		final List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
 
-		for (final BodyDeclaration bd : type.getMembers()) {
-			if (!(bd instanceof japa.parser.ast.body.MethodDeclaration)) {
-				continue;
-			}
+		if (type.getMembers() != null) {
+			for (final BodyDeclaration bd : type.getMembers()) {
+				if (!(bd instanceof japa.parser.ast.body.MethodDeclaration)) {
+					continue;
+				}
 
-			final japa.parser.ast.body.MethodDeclaration md = (japa.parser.ast.body.MethodDeclaration) bd;
-			methods.add(getMethod(md, typeFactory));
+				final japa.parser.ast.body.MethodDeclaration md = (japa.parser.ast.body.MethodDeclaration) bd;
+				methods.add(getMethod(md, typeFactory));
+			}
 		}
 
 		return methods;

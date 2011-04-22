@@ -47,4 +47,12 @@ public class ArtifactFactoryTypeDeclarationTest extends
 		Assert.assertEquals("EmptyClass2", a.getTypeDeclarations().get(1).getName());
 	}
 
+	@Test
+	public void parseEnumFromJavaFile() throws IOException {
+		final Artifact a = testFactory.createTestArtifact("EnumType");
+		
+		Assert.assertEquals(1, a.getTypeDeclarations().size());
+		Assert.assertEquals("EnumType", a.getTypeDeclarations().get(0).getName());
+	}
+
 }
