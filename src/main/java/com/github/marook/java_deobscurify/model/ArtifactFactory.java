@@ -191,6 +191,7 @@ public class ArtifactFactory {
 					artifacts.add(createArtifact(name, f));
 				} catch (final Exception e) {
 					System.err.println("Can't parse " + f);
+					e.printStackTrace(System.err);
 					// TODO replace this with a real error handling
 				}
 			}
