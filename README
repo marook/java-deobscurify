@@ -1,6 +1,6 @@
 java-deobscurify
 
-java-deobscurify is a very limited approach for deobscurifying java projects.
+java-deobscurify is a very limited approach for deobfuscating java projects.
 
 
 1) Current Status
@@ -12,7 +12,7 @@ java-deobscurify is a very limited approach for deobscurifying java projects.
 ---------------------------------------------------------------------
 Current Status
 
-Pre alpha, which means java-deobscurify can't be used to deobscurify real world
+Pre alpha, which means java-deobscurify can't be used to deobfuscate real world
 projects.
 
 ---------------------------------------------------------------------
@@ -26,12 +26,12 @@ $ mvn clean package
 ---------------------------------------------------------------------
 Usage
 
-$ java -jar target/java-deobscurify-0.0.1-SNAPSHOT.jar [old src] [obscurified src]
+$ java -jar target/java-deobscurify-0.0.2-SNAPSHOT.jar [old src] [obfuscated src]
 
-old src is the path to directory with the unobscurified source. This should
-be the java source files which you have manually deobscurified.
+old src is the path to directory with the unobfuscate source. This should
+be the java source files which you have manually deobfuscated.
 
-obscurified src is the path to the directory with the obscurified source.
+obfuscate src is the path to the directory with the obfuscated source.
 
 
 ---------------------------------------------------------------------
