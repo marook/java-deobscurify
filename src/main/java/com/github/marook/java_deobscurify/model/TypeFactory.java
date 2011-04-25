@@ -23,27 +23,15 @@ package com.github.marook.java_deobscurify.model;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.github.marook.java_deobscurify.util.Types;
+
 public class TypeFactory {
-	
-	private static final Set<String> BUILT_IN_TYPES = new HashSet<String>();
-	
-	static {
-		BUILT_IN_TYPES.add("byte");
-		BUILT_IN_TYPES.add("char");
-		BUILT_IN_TYPES.add("short");
-		BUILT_IN_TYPES.add("int");
-		BUILT_IN_TYPES.add("long");
-		BUILT_IN_TYPES.add("float");
-		BUILT_IN_TYPES.add("double");
-		BUILT_IN_TYPES.add("void");
-	}
 
 	private final String currentPackage;
-	
+
 	private final Set<String> imports;
 
 	private static void validateImports(final Collection<String> imports) {
@@ -56,7 +44,7 @@ public class TypeFactory {
 	}
 
 	public TypeFactory(final String currentPackage, final Set<String> imports) {
-		if(currentPackage == null){
+		if (currentPackage == null) {
 			throw new IllegalArgumentException();
 		}
 		validateImports(imports);
@@ -64,65 +52,54 @@ public class TypeFactory {
 		this.currentPackage = currentPackage;
 		this.imports = Collections.unmodifiableSet(imports);
 	}
-	
-	private String toRegEx(final String s){
+
+	private String toRegEx(final String s) {
 		return "\\Q" + s + "\\E";
 	}
-	
-	private String getImport(final String typeName){
+
+	private String getImport(final String typeName) {
 		// TODO escape typeName
-		final Pattern p = Pattern.compile("(^|(.+[.]))" + toRegEx(typeName) + "$");
-		
-		for(final String i : imports){
-			if(!p.matcher(i).matches()){
+		final Pattern p = Pattern.compile("(^|(.+[.]))" + toRegEx(typeName)
+				+ "$");
+
+		for (final String i : imports) {
+			if (!p.matcher(i).matches()) {
 				continue;
 			}
-			
+
 			return i;
 		}
-		
+
 		return null;
 	}
-	
-	private boolean isFullyQualifiedName(final String typeName){
+
+	private boolean isFullyQualifiedName(final String typeName) {
 		return typeName.contains(".");
-	}
-	
-	private boolean isBuiltInType(final String typeName){
-		final String rawType;
-		if(typeName.endsWith("[]")){
-			rawType = typeName.substring(0, typeName.length() - "[]".length());
-		}
-		else{
-			rawType = typeName;
-		}
-		
-		return BUILT_IN_TYPES.contains(rawType);
 	}
 
 	public Type getType(final String typeName) {
-		if(isFullyQualifiedName(typeName)){
+		if (isFullyQualifiedName(typeName)) {
 			return new Type(typeName);
 		}
-		
-		if(isBuiltInType(typeName)){
+
+		if (Types.isAtomicType(typeName)) {
 			// TODO store built in types and do not regenerate them
 			return new Type(typeName);
 		}
-		
+
 		final String importType = getImport(typeName);
-		if(importType != null){
+		if (importType != null) {
 			return new Type(importType);
 		}
-		
-		if(currentPackage.isEmpty()){
+
+		if (currentPackage.isEmpty()) {
 			return new Type(typeName);
 		}
-		
+
 		return new Type(currentPackage + "." + typeName);
 	}
-	
-	public Type getType(final japa.parser.ast.type.Type type){
+
+	public Type getType(final japa.parser.ast.type.Type type) {
 		return getType(type.toString());
 	}
 
