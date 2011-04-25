@@ -19,27 +19,28 @@
  *
  */
 
-package com.github.marook.java_deobscurify.model;
+package com.github.marook.java_deobscurify.compare;
 
-public class Parameter {
+import com.github.marook.java_deobscurify.model.Artifact;
+import com.github.marook.java_deobscurify.model.DistanceValidator;
 
-	private final Type type;
+public abstract class ValidatingArtifactComparator implements
+		ArtifactComparator {
 
-	public Parameter(final Type type) {
-		if (type == null) {
-			throw new IllegalArgumentException();
-		}
-
-		this.type = type;
-	}
-
-	public Type getType() {
-		return type;
-	}
+	protected abstract double getDistanceInternal(final Artifact from,
+			final Artifact to);
 
 	@Override
-	public String toString() {
-		return String.valueOf(type);
-	}
+	public double getDistance(final Artifact from, final Artifact to) {
+		try {
+			final double d = getDistanceInternal(from, to);
 
+			DistanceValidator.validateDistance(d);
+
+			return d;
+		} catch (final RuntimeException e) {
+			throw new RuntimeException("Error while getting distance from "
+					+ from + " to " + to, e);
+		}
+	}
 }

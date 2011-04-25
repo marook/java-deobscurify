@@ -24,12 +24,14 @@ package com.github.marook.java_deobscurify.model;
 import java.util.Collections;
 import java.util.List;
 
+import com.github.marook.java_deobscurify.util.Strings;
+
 public class MethodDeclaration {
 
 	private final Visibility visibility;
 
 	private final String name;
-	
+
 	private final Type returnType;
 
 	private final List<Parameter> parameters;
@@ -42,7 +44,7 @@ public class MethodDeclaration {
 		if (name.trim().isEmpty()) {
 			throw new IllegalArgumentException();
 		}
-		if(returnType == null){
+		if (returnType == null) {
 			throw new IllegalArgumentException();
 		}
 
@@ -59,13 +61,19 @@ public class MethodDeclaration {
 	public String getName() {
 		return name;
 	}
-	
+
 	public Type getReturnType() {
 		return returnType;
 	}
 
 	public List<Parameter> getParameters() {
 		return parameters;
+	}
+
+	@Override
+	public String toString() {
+		return String.valueOf(returnType) + " " + name + "("
+				+ Strings.cat(parameters) + ")";
 	}
 
 }

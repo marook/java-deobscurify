@@ -25,26 +25,32 @@ import java.util.Collections;
 import java.util.List;
 
 public class TypeDeclaration {
-	
+
 	private final String name;
-	
+
 	private final List<MethodDeclaration> methods;
-	
-	public TypeDeclaration(final String name, final List<MethodDeclaration> methods){
-		if(name == null){
+
+	public TypeDeclaration(final String name,
+			final List<MethodDeclaration> methods) {
+		if (name == null) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		this.name = name;
 		this.methods = Collections.unmodifiableList(methods);
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public List<MethodDeclaration> getMethods() {
 		return methods;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 
 }

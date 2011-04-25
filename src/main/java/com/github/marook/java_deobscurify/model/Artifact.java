@@ -50,21 +50,26 @@ public class Artifact {
 	public Set<String> getImports() {
 		return imports;
 	}
-	
+
 	public List<TypeDeclaration> getTypeDeclarations() {
 		return typeDeclarations;
 	}
-	
-	public TypeDeclaration getTypeDeclaration(final String name){
-		for(final TypeDeclaration td : getTypeDeclarations()){
-			if(!name.equals(td.getName())){
+
+	public TypeDeclaration getTypeDeclaration(final String name) {
+		for (final TypeDeclaration td : getTypeDeclarations()) {
+			if (!name.equals(td.getName())) {
 				continue;
 			}
-			
+
 			return td;
 		}
-		
+
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 
 }

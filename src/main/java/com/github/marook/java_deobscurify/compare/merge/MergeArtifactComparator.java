@@ -23,47 +23,48 @@ package com.github.marook.java_deobscurify.compare.merge;
 
 import java.util.Collection;
 
-import com.github.marook.java_deobscurify.compare.ArtifactComparator;
+import com.github.marook.java_deobscurify.compare.ValidatingArtifactComparator;
 import com.github.marook.java_deobscurify.model.Artifact;
 import com.github.marook.java_deobscurify.model.DistanceValidator;
 
-public class MergeArtifactComparator implements ArtifactComparator {
-	
+public class MergeArtifactComparator extends ValidatingArtifactComparator {
+
 	private final Collection<ChildComparator> children;
-	
+
 	private final double weightSum;
-	
-	private static double calcWeightSum(final Collection<ChildComparator> children){
+
+	private static double calcWeightSum(
+			final Collection<ChildComparator> children) {
 		double sum = 0.0d;
-		
-		for(final ChildComparator c : children){
+
+		for (final ChildComparator c : children) {
 			sum += c.getWeight();
 		}
-		
+
 		return sum;
 	}
-	
+
 	public MergeArtifactComparator(final Collection<ChildComparator> children) {
-		if(children.isEmpty()){
+		if (children.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		this.children = children;
 		this.weightSum = calcWeightSum(children);
 	}
 
 	@Override
-	public double getDistance(final Artifact from, final Artifact to) {
+	protected double getDistanceInternal(final Artifact from, final Artifact to) {
 		double distanceSum = 0.0;
-		
-		for(final ChildComparator c : children){
+
+		for (final ChildComparator c : children) {
 			final double distance = c.getComparator().getDistance(from, to);
-			
+
 			DistanceValidator.validateDistance(distance);
-			
+
 			distanceSum += distance * c.getWeight();
 		}
-		
+
 		return distanceSum / weightSum;
 	}
 

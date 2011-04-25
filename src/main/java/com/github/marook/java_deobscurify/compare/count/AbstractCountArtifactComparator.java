@@ -21,19 +21,19 @@
 
 package com.github.marook.java_deobscurify.compare.count;
 
-import com.github.marook.java_deobscurify.compare.ArtifactComparator;
+import com.github.marook.java_deobscurify.compare.ValidatingArtifactComparator;
 import com.github.marook.java_deobscurify.model.Artifact;
 
-public abstract class AbstractCountArtifactComparator implements
-		ArtifactComparator {
+public abstract class AbstractCountArtifactComparator extends
+		ValidatingArtifactComparator {
 
 	private final double equalWeight;
 
 	private final double removedWeight;
 
 	private final double addedWeight;
-	
-	protected AbstractCountArtifactComparator(){
+
+	protected AbstractCountArtifactComparator() {
 		this(1.0, 1.0, 1.0);
 	}
 
@@ -49,7 +49,7 @@ public abstract class AbstractCountArtifactComparator implements
 	protected abstract int getNumberOfEqualElements(Artifact a1, Artifact a2);
 
 	@Override
-	public double getDistance(final Artifact from, final Artifact to) {
+	protected double getDistanceInternal(final Artifact from, final Artifact to) {
 		final int equal = getNumberOfEqualElements(from, to);
 		final int removed = getNumberOfElements(from) - equal;
 		final int added = getNumberOfElements(to) - equal;

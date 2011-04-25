@@ -22,39 +22,44 @@
 package com.github.marook.java_deobscurify.model;
 
 public class Type {
-	
+
 	private final String name;
-	
-	public Type(final String name){
-		if(name.trim().isEmpty()){
+
+	public Type(final String name) {
+		if (name.trim().isEmpty()) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		this.name = name;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
 	public boolean equals(final Object obj) {
-		if(this == obj){
+		if (this == obj) {
 			return true;
 		}
-		
-		if(!(obj instanceof Type)){
+
+		if (!(obj instanceof Type)) {
 			return false;
 		}
-		
+
 		final Type other = (Type) obj;
-		
+
 		return this.name.equals(other.name);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return name.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 
 }

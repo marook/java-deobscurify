@@ -19,27 +19,36 @@
  *
  */
 
-package com.github.marook.java_deobscurify.model;
+package com.github.marook.java_deobscurify.util;
 
-public class Parameter {
+public final class Strings {
 
-	private final Type type;
+	public static final String DEFAULT_SEPARATOR = ", ";
 
-	public Parameter(final Type type) {
-		if (type == null) {
-			throw new IllegalArgumentException();
+	private Strings() {
+		// this method should only contain static members
+		throw new IllegalStateException();
+	}
+
+	public static <T> String cat(final Iterable<T> ts) {
+		return cat(ts, DEFAULT_SEPARATOR);
+	}
+
+	public static <T> String cat(final Iterable<T> ts, final String separator) {
+		final StringBuilder sb = new StringBuilder();
+
+		boolean first = true;
+		for (final T t : ts) {
+			if (first) {
+				first = false;
+			} else {
+				sb.append(separator);
+			}
+
+			sb.append(t);
 		}
 
-		this.type = type;
-	}
-
-	public Type getType() {
-		return type;
-	}
-
-	@Override
-	public String toString() {
-		return String.valueOf(type);
+		return sb.toString();
 	}
 
 }
