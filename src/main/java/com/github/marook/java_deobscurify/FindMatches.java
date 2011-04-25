@@ -60,7 +60,7 @@ public class FindMatches {
 					.parseArtifactsFromDirectory(obscurifiedDir);
 
 			final ArtifactMatcher artifactMatcher = new ArtifactMatcher(
-					createArtifactComparator(), 0.99);
+					createArtifactComparator(), 0.2);
 
 			final MatchPrinter matchPrinter = new MatchPrinter();
 
