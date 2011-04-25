@@ -22,17 +22,21 @@
 package com.github.marook.java_deobscurify.model;
 
 public final class DistanceValidator {
-	
+
 	public final static double MIN_DISTANCE = 0.0;
-	
+
 	public final static double MAX_DISTANCE = 1.0;
-	
-	private DistanceValidator(){
+
+	private DistanceValidator() {
 		// this class should only contain static members
 	}
-	
-	public static void validateDistance(final double distance){
-		if(distance < MIN_DISTANCE || distance > MAX_DISTANCE){
+
+	public static boolean isValidDistance(final double distance) {
+		return distance >= MIN_DISTANCE && distance <= MAX_DISTANCE;
+	}
+
+	public static void validateDistance(final double distance) {
+		if (!isValidDistance(distance)) {
 			throw new IllegalArgumentException("Illegal distance: " + distance);
 		}
 	}
