@@ -28,7 +28,7 @@ import com.github.marook.java_deobscurify.model.Type;
 import com.github.marook.java_deobscurify.util.Equalator;
 import com.github.marook.java_deobscurify.util.Types;
 
-public class ObscurifiedTypeEqualator implements Equalator<Type> {
+public class ObfuscationTypeEqualator implements Equalator<Type> {
 
 	private final Set<String> jseTypeNames = new HashSet<String>();
 

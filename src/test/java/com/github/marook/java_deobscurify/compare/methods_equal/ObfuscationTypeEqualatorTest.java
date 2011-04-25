@@ -29,13 +29,13 @@ import org.junit.Test;
 import com.github.marook.java_deobscurify.model.Type;
 import com.github.marook.java_deobscurify.util.Equalator;
 
-public class ObscurifiedTypeEqualatorTest {
+public class ObfuscationTypeEqualatorTest {
 
 	private Equalator<Type> equalator;
 
 	@Before
 	public void setUpEqualator() {
-		equalator = new ObscurifiedTypeEqualator();
+		equalator = new ObfuscationTypeEqualator();
 	}
 
 	private void assertEqual(final String type1, final String type2) {

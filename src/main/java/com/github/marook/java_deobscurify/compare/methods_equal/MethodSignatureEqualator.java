@@ -30,7 +30,7 @@ import com.github.marook.java_deobscurify.util.Equalator;
 
 public class MethodSignatureEqualator implements Equalator<MethodDeclaration> {
 
-	private final Equalator<Type> typeEqualator = new ObscurifiedTypeEqualator();
+	private final Equalator<Type> typeEqualator = new ObfuscationTypeEqualator();
 
 	private boolean isParameterTypesEqual(final MethodDeclaration m1,
 			final MethodDeclaration m2) {
