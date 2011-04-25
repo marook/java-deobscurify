@@ -32,36 +32,37 @@ import com.github.marook.java_deobscurify.util.XCollections;
 
 public class MethodsEqualArtifactComparator extends
 		AbstractCountArtifactComparator {
-	
+
 	@Override
 	protected int getNumberOfElements(final Artifact a) {
 		int methods = 0;
-		
-		for(final TypeDeclaration td : a.getTypeDeclarations()){
+
+		for (final TypeDeclaration td : a.getTypeDeclarations()) {
 			methods += td.getMethods().size();
 		}
-		
+
 		return methods;
 	}
-	
-	private Collection<MethodDeclaration> getMethods(final Artifact a){
+
+	private Collection<MethodDeclaration> getMethods(final Artifact a) {
 		final Collection<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
-		
-		for(final TypeDeclaration td : a.getTypeDeclarations()){
+
+		for (final TypeDeclaration td : a.getTypeDeclarations()) {
 			methods.addAll(td.getMethods());
 		}
-		
+
 		return methods;
 	}
-	
+
 	@Override
 	protected int getNumberOfEqualElements(final Artifact a1, final Artifact a2) {
-		final Collection<MethodDeclaration> a1Methods = getMethods(a1); 
+		final Collection<MethodDeclaration> a1Methods = getMethods(a1);
 		final Collection<MethodDeclaration> a2Methods = getMethods(a2);
-		
-		XCollections.retainAll(a1Methods, a2Methods, new MethodSignatureEqualator());
-		
-		return a1Methods.size();
+
+		XCollections.retainAll(a1Methods, a2Methods,
+				new MethodSignatureEqualator());
+
+		return Math.min(a1Methods.size(), a2Methods.size());
 	}
 
 }
