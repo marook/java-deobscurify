@@ -21,19 +21,49 @@
 
 package com.github.marook.java_deobscurify.compare.methods_equal;
 
+import java.util.List;
+
 import com.github.marook.java_deobscurify.model.MethodDeclaration;
+import com.github.marook.java_deobscurify.model.Parameter;
+import com.github.marook.java_deobscurify.model.Type;
 import com.github.marook.java_deobscurify.util.Equalator;
 
 public class MethodSignatureEqualator implements Equalator<MethodDeclaration> {
 
+	private final Equalator<Type> typeEqualator = new ObscurifiedTypeEqualator();
+
+	private boolean isParameterTypesEqual(final MethodDeclaration m1,
+			final MethodDeclaration m2) {
+		final List<Parameter> ps1 = m1.getParameters();
+		final List<Parameter> ps2 = m2.getParameters();
+
+		final int l1 = ps1.size();
+		final int l2 = ps2.size();
+
+		if (l1 != l2) {
+			return false;
+		}
+
+		for (int i = 0; i < l1; ++i) {
+			final Parameter p1 = ps1.get(i);
+			final Parameter p2 = ps2.get(i);
+
+			if (!typeEqualator.equalTo(p1.getType(), p2.getType())) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	@Override
 	public boolean equalTo(final MethodDeclaration o1,
 			final MethodDeclaration o2) {
-		if(!o1.getReturnType().equals(o2.getReturnType())){
+		if (!typeEqualator.equalTo(o1.getReturnType(), o2.getReturnType())) {
 			return false;
 		}
-		
-		return o1.getParameters().equals(o2.getParameters()); 
+
+		return isParameterTypesEqual(o1, o2);
 	}
 
 }
