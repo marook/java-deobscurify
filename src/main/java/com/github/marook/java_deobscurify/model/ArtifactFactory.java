@@ -27,6 +27,7 @@ import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ModifierSet;
+import japa.parser.ast.stmt.BlockStmt;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -96,17 +97,26 @@ public class ArtifactFactory {
 		return parameters;
 	}
 
+	private List<String> getImplSource(
+			final japa.parser.ast.body.MethodDeclaration md) {
+		final BlockStmt body = md.getBody();
+
+		if (body == null) {
+			return Collections.emptyList();
+		}
+
+		return Arrays.asList(body.toString().split("\n"));
+
+	}
+
 	private MethodDeclaration getMethod(
 			final japa.parser.ast.body.MethodDeclaration md,
 			final TypeFactory typeFactory) {
 		final Type returnType = typeFactory.getType(md.getType());
 
-		final List<String> impl = Arrays.asList(md.getBody().toString()
-				.split("\n"));
-
 		return new MethodDeclaration(getVisibility(md.getModifiers()),
 				md.getName(), returnType, getMethodParameters(md, typeFactory),
-				impl);
+				getImplSource(md));
 	}
 
 	private List<MethodDeclaration> getMethods(

@@ -20,6 +20,8 @@
  */
 package com.github.marook.java_deobscurify.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -65,6 +67,19 @@ public class Artifact {
 		}
 
 		return null;
+	}
+
+	public Collection<MethodDeclaration> getAllMethods() {
+		final List<TypeDeclaration> typeDeclarations = getTypeDeclarations();
+
+		final Collection<MethodDeclaration> methods = new ArrayList<MethodDeclaration>(
+				typeDeclarations.size() * 16);
+
+		for (final TypeDeclaration td : typeDeclarations) {
+			methods.addAll(td.getMethods());
+		}
+
+		return methods;
 	}
 
 	@Override

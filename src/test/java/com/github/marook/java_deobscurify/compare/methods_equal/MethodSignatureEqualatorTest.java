@@ -21,6 +21,7 @@
 
 package com.github.marook.java_deobscurify.compare.methods_equal;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import junit.framework.Assert;
@@ -50,11 +51,11 @@ public class MethodSignatureEqualatorTest {
 
 		final MethodDeclaration mdThis = new MethodDeclaration(
 				Visibility.PACKAGE, "thisName", new Type("void"),
-				Arrays.asList(parameters));
+				Arrays.asList(parameters), new ArrayList<String>());
 
 		final MethodDeclaration mdThat = new MethodDeclaration(
 				Visibility.PACKAGE, "thatName", new Type("void"),
-				Arrays.asList(parameters));
+				Arrays.asList(parameters), new ArrayList<String>());
 
 		Assert.assertTrue(equalator.equalTo(mdThis, mdThat));
 	}
@@ -66,11 +67,11 @@ public class MethodSignatureEqualatorTest {
 
 		final MethodDeclaration mdThis = new MethodDeclaration(
 				Visibility.PACKAGE, "name", new Type("void"),
-				Arrays.asList(parameters));
+				Arrays.asList(parameters), new ArrayList<String>());
 
 		final MethodDeclaration mdThat = new MethodDeclaration(
 				Visibility.PACKAGE, "name", new Type("int"),
-				Arrays.asList(parameters));
+				Arrays.asList(parameters), new ArrayList<String>());
 
 		Assert.assertFalse(equalator.equalTo(mdThis, mdThat));
 	}
@@ -80,12 +81,12 @@ public class MethodSignatureEqualatorTest {
 		final MethodDeclaration mdThis = new MethodDeclaration(
 				Visibility.PACKAGE, "name", new Type("void"),
 				Arrays.asList(new Parameter[] { new Parameter(new Type(
-						"java.util.Date")) }));
+						"java.util.Date")) }), new ArrayList<String>());
 
 		final MethodDeclaration mdThat = new MethodDeclaration(
 				Visibility.PACKAGE, "name", new Type("void"),
 				Arrays.asList(new Parameter[] { new Parameter(new Type(
-						"java.lang.String")) }));
+						"java.lang.String")) }), new ArrayList<String>());
 
 		Assert.assertFalse(equalator.equalTo(mdThis, mdThat));
 	}

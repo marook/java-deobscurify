@@ -21,7 +21,6 @@
 
 package com.github.marook.java_deobscurify.compare.methods_equal;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import com.github.marook.java_deobscurify.compare.count.AbstractCountArtifactComparator;
@@ -44,20 +43,10 @@ public class MethodsEqualArtifactComparator extends
 		return methods;
 	}
 
-	private Collection<MethodDeclaration> getMethods(final Artifact a) {
-		final Collection<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
-
-		for (final TypeDeclaration td : a.getTypeDeclarations()) {
-			methods.addAll(td.getMethods());
-		}
-
-		return methods;
-	}
-
 	@Override
 	protected int getNumberOfEqualElements(final Artifact a1, final Artifact a2) {
-		final Collection<MethodDeclaration> a1Methods = getMethods(a1);
-		final Collection<MethodDeclaration> a2Methods = getMethods(a2);
+		final Collection<MethodDeclaration> a1Methods = a1.getAllMethods();
+		final Collection<MethodDeclaration> a2Methods = a2.getAllMethods();
 
 		XCollections.retainAll(a1Methods, a2Methods,
 				new MethodSignatureEqualator());
