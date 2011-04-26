@@ -34,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -100,8 +101,12 @@ public class ArtifactFactory {
 			final TypeFactory typeFactory) {
 		final Type returnType = typeFactory.getType(md.getType());
 
+		final List<String> impl = Arrays.asList(md.getBody().toString()
+				.split("\n"));
+
 		return new MethodDeclaration(getVisibility(md.getModifiers()),
-				md.getName(), returnType, getMethodParameters(md, typeFactory));
+				md.getName(), returnType, getMethodParameters(md, typeFactory),
+				impl);
 	}
 
 	private List<MethodDeclaration> getMethods(

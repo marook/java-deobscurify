@@ -22,6 +22,9 @@
 package com.github.marook.java_deobscurify.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -61,4 +64,23 @@ public class ArtifactFactoryMethodsTest extends AbstractArtifactFactoryTest {
 				td.getMethods().get(0).getReturnType().getName());
 	}
 
+	private static void assertEqualSrc(final String[] expected,
+			final List<String> actual) {
+		final List<String> actualTrimmed = new ArrayList<String>(actual.size());
+
+		for (final String s : actual) {
+			actualTrimmed.add(s.trim());
+		}
+
+		Assert.assertEquals(Arrays.asList(expected), actualTrimmed);
+	}
+
+	@Test
+	public void testMethodImplSource() throws IOException {
+		final TypeDeclaration td = getClassWithMethods();
+
+		final String[] expectedSrc = new String[] { "{",
+				"String s = \"hello world\";", "}" };
+		assertEqualSrc(expectedSrc, td.getMethods().get(0).getImplSource());
+	}
 }

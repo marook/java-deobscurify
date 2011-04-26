@@ -36,8 +36,11 @@ public class MethodDeclaration {
 
 	private final List<Parameter> parameters;
 
+	private final List<String> implSource;
+
 	public MethodDeclaration(final Visibility visibility, final String name,
-			final Type returnType, final List<Parameter> parameters) {
+			final Type returnType, final List<Parameter> parameters,
+			final List<String> implSource) {
 		if (visibility == null) {
 			throw new IllegalArgumentException();
 		}
@@ -52,6 +55,7 @@ public class MethodDeclaration {
 		this.name = name;
 		this.returnType = returnType;
 		this.parameters = Collections.unmodifiableList(parameters);
+		this.implSource = Collections.unmodifiableList(implSource);
 	}
 
 	public Visibility getVisibility() {
@@ -68,6 +72,10 @@ public class MethodDeclaration {
 
 	public List<Parameter> getParameters() {
 		return parameters;
+	}
+
+	public List<String> getImplSource() {
+		return implSource;
 	}
 
 	@Override
