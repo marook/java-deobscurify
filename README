@@ -33,6 +33,17 @@ be the java source files which you have manually deobfuscated.
 
 obfuscate src is the path to the directory with the obfuscated source.
 
+The output will be something like this:
+
+oldClass.java:
+  100% newClass.java
+  77% otherNewClass.java
+
+This means that oldClass from old src is 100% equal in the obfuscation
+comparision to newClass from the obfuscated src. This doesen't mean that
+things like class names are 100% equal. Only adjectives which won't change
+during obfuscation are compared.
+
 
 ---------------------------------------------------------------------
 Contact
